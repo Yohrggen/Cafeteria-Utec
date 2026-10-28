@@ -1,0 +1,22 @@
+$def with (pedido)
+    <table>
+        <thead>
+            <tr>
+                <th>No. Pedido</th>
+                <th>Nombre cliente</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Tiempo de preparación</th>
+            </tr>
+        </thead>
+        <tbody>
+            $for p in pedido:
+                <tr>
+                <td>$p[0]</td>
+                <td>$p[1]</td>
+                <td>$p[2]</td>
+                <td>$p[3]</td>
+                <td>$p[4]</td>
+            </tr>
+        </tbody>
+    </table>   

@@ -1,0 +1,61 @@
+render = web.template.render ("views", base = "layout")
+
+class ListaProducto:
+
+    def GET(self):
+        productos = self.obtenerProducto()
+        return render.productos.lista_producto(productos)
+    
+    def obtenerProducto(self):
+        try:
+            conn = sqlite3.connect('sql/ferreteria_shushu.db')
+            cursor = conn.cursor()
+            query = "SELECT * FROM productos;"
+            cursor.execute(query)
+            productos = []
+            for row in cursor.fetchall():
+                producto = {
+                    'id_producto': row[0],
+                    'nombre_producto': row[1],
+                    'precio_producto': row[2],
+                    'cantidad_producto': row[3],
+                    'marca_producto': row[4]
+                }
+                productos.append(producto)
+            conn.close()
+            return productos
+        except sqlite3.Error as error:
+            print(f"Error 103: {error.args}")
+            return[]
+        except Exception as error:
+            print(f"Error 104: {error.args}")
+            return[]
+        finally:
+            conn.close()
+
+$def with (productos)
+
+<h1 text align="center">LISTA DE PRODUCTOS</h1>
+
+<table class="table">
+  <tr>
+    <th>ID</th>
+    <th>Nombre</th>
+    <th>Precio</th>
+    <th>Cantidad</th>        
+    <th>Marca</th>
+  </tr>
+  $for producto in productos:
+    <tr>
+      <td>$producto['id_producto']</td>
+      <td>$producto['nombre_producto']</td>
+      <td>$producto['precio_producto']</td>
+      <td>$producto['cantidad_producto']</td>
+      <td>$producto['marca_producto']</td>
+      <td><a href="/ver_producto/$producto['id_producto']"> <button type="button" class="btn btn-outline-info">Ver</button></td>
+      <td><a href="/editar_producto/$producto['id_producto']"> <button type="button" class="btn btn-outline-warning">Editar</button></td>
+      <td><a href="/borrar_producto/$producto['id_producto']"> <button type="button" class="btn btn-outline-danger">Borrar</button></td>    
+    </tr>
+</table>
+<a href="/insertar_producto"><button type="button" class="btn btn-outline-warning">Insertar</button></a>
+<a href="/"> <button type="button" class="btn btn-outline-primary">Regresar</button></a>
